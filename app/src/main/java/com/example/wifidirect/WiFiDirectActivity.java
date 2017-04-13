@@ -21,11 +21,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.ActionListener;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pConfig;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pDevice;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pManager;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pManager.ActionListener;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -75,16 +75,20 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        channel = manager.initialize(this, getMainLooper(), null);
+        //manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+
+        //channel = manager.initialize(this, getMainLooper(), null);
     }
 
     /** register the BroadcastReceiver with the intent values to be matched */
     @Override
     public void onResume() {
         super.onResume();
+        manager = new WifiP2pManager();
         receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
         registerReceiver(receiver, intentFilter);
+        manager.setReceiver(receiver);
+        manager.send_wifi_p2p_state(true);
     }
 
     @Override
@@ -219,7 +223,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
             Toast.makeText(this, "Channel lost. Trying again", Toast.LENGTH_LONG).show();
             resetData();
             retryChannel = true;
-            manager.initialize(this, getMainLooper(), this);
+            //manager.initialize(this, getMainLooper(), this);
         } else {
             Toast.makeText(this,
                     "Severe! Channel is probably lost permanently. Try Disable/Re-Enable P2P.",
@@ -239,10 +243,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
             final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
                     .findFragmentById(R.id.frag_list);
             if (fragment.getDevice() == null
-                    || fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
+                    //|| fragment.getDevice().status == WifiP2pDevice.CONNECTED
+                    ) {
                 disconnect();
             } else if (fragment.getDevice().status == WifiP2pDevice.AVAILABLE
-                    || fragment.getDevice().status == WifiP2pDevice.INVITED) {
+                    //|| fragment.getDevice().status == WifiP2pDevice.INVITED
+            ){
 
                 manager.cancelConnect(channel, new ActionListener() {
 

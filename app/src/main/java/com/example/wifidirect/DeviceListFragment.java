@@ -20,10 +20,10 @@ import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pConfig;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pDevice;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pDeviceList;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,14 +72,14 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:
                 return "Available";
-            case WifiP2pDevice.INVITED:
+            /*case WifiP2pDevice.INVITED:
                 return "Invited";
             case WifiP2pDevice.CONNECTED:
                 return "Connected";
             case WifiP2pDevice.FAILED:
                 return "Failed";
             case WifiP2pDevice.UNAVAILABLE:
-                return "Unavailable";
+                return "Unavailable";*/
             default:
                 return "Unknown";
 

@@ -33,11 +33,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.wifi.WpsInfo;
-import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import com.example.wifidirect.net.wifi.WpsInfo;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pConfig;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pDevice;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pInfo;
+import com.example.wifidirect.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -124,36 +124,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
 		return mContentView;
 	}
-	public String getIPAddress(boolean useIPv4) {
-		try {
-			List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-			for (NetworkInterface intf : interfaces) {
-				List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-				for (InetAddress addr : addrs) {
-					if (!addr.isLoopbackAddress()) {
-						String sAddr = addr.getHostAddress();
-						//boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-						boolean isIPv4 = sAddr.indexOf(':')<0;
 
-						if (useIPv4) {
-							if (isIPv4)
-								return sAddr;
-						} else {
-							if (!isIPv4) {
-								int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-								return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-							}
-						}
-					}
-				}
-			}
-		} catch (Exception ex) { } // for now eat exceptions
-		return "";
-	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		String localIP = getIPAddress(true);
+		if (data == null) return;
+		String localIP = this.info.getGroupOwnerAddress();
 		Log.d(WiFiDirectActivity.TAG, "localIp : " + localIP);
 		//Log.d(WiFiDirectActivity.TAG, "deviceMac : " + device.deviceAddress);
 		// Trick to find the ip in the file /proc/net/arp
@@ -199,7 +174,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		// InetAddress from WifiP2pInfo struct.
 		view = (TextView) mContentView.findViewById(R.id.device_info);
 		staticTextView = view;
-		view.setText("My Ip  - " + getIPAddress(true));
+		view.setText("My Ip  - " + this.info.getGroupOwnerAddress());
 		//view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
 
 		mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
