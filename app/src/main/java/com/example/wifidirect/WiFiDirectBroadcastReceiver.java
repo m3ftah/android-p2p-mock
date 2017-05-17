@@ -20,10 +20,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import mock.net.wifi.p2p.WifiP2pDevice;
+import mock.net.wifi.p2p.WifiP2pManager;
+import mock.net.wifi.p2p.WifiP2pManager.Channel;
+import mock.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
 /**
@@ -34,6 +34,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager manager;
     private Channel channel;
     private WiFiDirectActivity activity;
+    public static final String TAG = "WiFiDirectBrRec";
 
     /**
      * @param manager WifiP2pManager system service
@@ -56,6 +57,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        Log.d(TAG,action);
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
 
             // UI update to indicate wifi p2p status.
